@@ -1,5 +1,3 @@
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,22 +40,20 @@ public class WebScraper {
     private static List<NewsArticle> extractBBCNewsData(String url) throws IOException {
         List<NewsArticle> newsArticles = new ArrayList<>();
         Document doc = Jsoup.connect(url).get();
-
-        Elements newsHeadings = doc.select("h2");
+        Elements newsHeadings = doc.select("h2[data-testid=card-headline]");
 
         for (Element headline : newsHeadings) {
-            Element linkElement = headline.selectFirst("a");
+            String title = headline.text();
+            Element linkElement = headline.parent().selectFirst("a[href]");
             if (linkElement == null) continue;
 
-            String title = headline.text();
             String link = linkElement.absUrl("href");
-
             if (link == null || link.isEmpty()) continue;
 
             try {
                 Document articleDoc = Jsoup.connect(link).get();
-                String date = articleDoc.select("time").attr("datetime");
-                String author = articleDoc.select("[rel=author]").text();
+                String date = articleDoc.select("time.sc-801dd632-2").attr("datetime");
+                String author = articleDoc.select("span.sc-801dd632-7").text();
 
                 NewsArticle news = new NewsArticle(title, date, author, link);
                 newsArticles.add(news);
@@ -68,6 +64,8 @@ public class WebScraper {
 
         return newsArticles;
     }
+
+
 
 
     static class NewsArticle {
@@ -88,3 +86,4 @@ public class WebScraper {
         }
     }
 }
+
