@@ -1,4 +1,19 @@
-<form action="scrape" method="GET">
-  <input type="url" name="url" placeholder="Enter URL">
-  <button type="submit">Scrape</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Scraper</title>
+</head>
+<body>
+    <h1>Web Scraper</h1>
+    <form action="ScrapeServlet" method="post">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" required><br><br>
+
+        <input type="checkbox" name="options" value="title"> Title<br>
+        <input type="checkbox" name="options" value="links"> Links<br>
+        <input type="checkbox" name="options" value="images"> Images<br><br>
+
+        <button type="submit">Scrape</button>
+    </form>
+</body>
+</html>
